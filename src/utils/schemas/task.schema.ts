@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-//cria um schema de task "genérico"
+//schema de task "genérico"
 export const taskSchema = z.object({
 	title: z
 		.string()
@@ -10,19 +10,21 @@ export const taskSchema = z.object({
 	priority: z.enum(['LOW', 'MEDIUM', 'HIGH'], {
 		errorMap: () => ({ message: 'Prioridade deve ser LOW, MEDIUM ou HIGH' }),
 	}),
-	//aqui ele recebe uma string e transforma em date.
-	//porque nao usar z.date? porque a requisiçao nao vai vir como um objeto Date e z.date trata apenas de objetos do tipo Date
+	//aqui ele retorna erro se a data é fora do padrão ou se é futura, tem que usar pipe
+	// se não ele retorna multiplos erros, sla
 	date: z
 		.string()
-		.refine((str) => !Number.isNaN(Date.parse(str)), { message: 'Data inválida' })
-		.transform((str) => new Date(str))
-		.refine((date) => date > new Date(), {
-			message: 'Data deve ser futura',
-		}),
+		.datetime({ offset: true, message: 'Data deve estar em ISO-8601 completo' })
+		.pipe(
+			z
+				.string()
+				.transform((s) => new Date(s))
+				.refine((d) => d > new Date(), { message: 'Data deve ser futura' }),
+		),
+
 	completed: z.boolean().optional(),
 });
 
 //cria um schema de task especifico para cada os dois tipos de requisição, create e update
-
 export const createTaskSchema = taskSchema.omit({ completed: true });
 export const updateTaskSchema = taskSchema.partial();

@@ -10,7 +10,7 @@ const taskController = new TaskController();
 
 router.post('/tasks', validate(createTaskSchema), taskController.create.bind(taskController));
 
-router.get('/tasks/:id', taskController.findById.bind(taskController));
+router.get('/tasks/:id', taskController.findById.bind(taskController)); //TODO: Validar se o id é válido?
 
 router.get('/tasks', taskController.list.bind(taskController));
 
