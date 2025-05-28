@@ -13,7 +13,6 @@ export class TaskRepository {
 		return this.prisma.task.create({
 			data: {
 				...data,
-				completed: false,
 			},
 		});
 	}
@@ -44,9 +43,19 @@ export class TaskRepository {
 		});
 	}
 
-	async deleteMany(userId: string): Promise<void> {
+	async deleteMany(ids: string[]): Promise<void> {
 		await this.prisma.task.deleteMany({
-			where: { userId },
+			where: { id: { in: ids } },
 		});
+	}
+
+	async deleteCompletedByUserId(userId: string): Promise<number> {
+		const result = await this.prisma.task.deleteMany({
+			where: {
+				userId,
+				completed: true,
+			},
+		});
+		return result.count;
 	}
 }

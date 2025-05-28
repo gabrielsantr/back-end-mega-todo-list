@@ -10,7 +10,7 @@ export function validate(schema: ZodSchema) {
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const errorMessages = error.errors.map((issue) => ({
-					message: `${issue.path.join('.')}: ${issue.message}`,
+					message: issue.message,
 				}));
 				res.status(400).json({ error: 'Erro de validação', details: errorMessages });
 				return;

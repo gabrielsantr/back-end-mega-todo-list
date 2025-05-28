@@ -8,9 +8,9 @@ datasource db {
 }
 
 enum Priority {
-  LOW
-  MEDIUM
-  HIGH
+  baixa
+  média
+  alta
 }
 
 model User {

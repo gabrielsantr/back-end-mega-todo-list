@@ -13,18 +13,13 @@ export const userSchema = z.object({
 		.min(8, 'Senha deve ter no mínimo 8 caracteres')
 		.max(100, 'Senha deve ter no máximo 100 caracteres')
 		.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Senha deve ter pelo menos: 1 letra minúscula, 1 maiúscula e 1 número'),
-
-	createdAt: z.date(),
 });
 
-// schema para criação de usuário
+// schema para criação de usuário (registro)
 export const createUserSchema = userSchema.omit({ id: true });
 
-// schema para atualização
+// schema para atualização (apenas dados editáveis, sem id)
 export const updateUserSchema = userSchema.omit({ id: true }).partial();
 
-// para login
+// para login (email + password)
 export const loginUserSchema = userSchema.pick({ email: true, password: true });
-
-// para validar apenas UUID
-export const userIdSchema = userSchema.pick({ id: true });

@@ -1,21 +1,31 @@
 import { Router } from 'express';
 import { TaskController } from '../controllers/task.controller';
 import { validate } from '../middlewares/validation.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
 import { createTaskSchema, updateTaskSchema } from '../utils/schemas/task.schema';
 
 const router = Router();
 const taskController = new TaskController();
 
-//TODO: Adicionar o middleware de autenticação
+// Todas as rotas de tasks requerem autenticação
+router.post('/tasks', authenticate, validate(createTaskSchema), taskController.create.bind(taskController));
 
-router.post('/tasks', validate(createTaskSchema), taskController.create.bind(taskController));
+// Buscar task pelo id dela
+router.get('/tasks/:id', authenticate, taskController.findById.bind(taskController));
 
-router.get('/tasks/:id', taskController.findById.bind(taskController)); //TODO: Validar se o id é válido?
+// Buscar todas as tasks do usuário
+router.get('/tasks', authenticate, taskController.list.bind(taskController));
 
-router.get('/tasks', taskController.list.bind(taskController));
+// Deletar todas as tasks completadas do usuário
+router.delete('/tasks', authenticate, taskController.deleteCompleted.bind(taskController));
 
-router.put('/tasks/:id', validate(updateTaskSchema), taskController.update.bind(taskController));
+// Atualizar task pelo id dela
+router.put('/tasks/:id', authenticate, validate(updateTaskSchema), taskController.update.bind(taskController));
 
-router.delete('/tasks/:id', taskController.delete.bind(taskController));
+// Deletar task pelo id dela
+router.delete('/tasks/:id', authenticate, taskController.delete.bind(taskController));
+
+// Deletar várias tasks pelo id delas
+router.delete('/tasks/delete-many', authenticate, taskController.deleteMany.bind(taskController));
 
 export default router;

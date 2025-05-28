@@ -7,8 +7,8 @@ export const taskSchema = z.object({
 		.min(3, 'Título deve ter no mínimo 3 caracteres')
 		.max(100, 'Título deve ter no máximo 100 caracteres'),
 	description: z.string().max(500, 'Descrição deve ter no máximo 500 caracteres'),
-	priority: z.enum(['LOW', 'MEDIUM', 'HIGH'], {
-		errorMap: () => ({ message: 'Prioridade deve ser LOW, MEDIUM ou HIGH' }),
+	priority: z.enum(['baixa', 'média', 'alta'], {
+		errorMap: () => ({ message: 'Prioridade deve ser baixa, média ou alta' }),
 	}),
 	//aqui ele retorna erro se a data é fora do padrão ou se é futura, tem que usar pipe
 	// se não ele retorna multiplos erros, sla
