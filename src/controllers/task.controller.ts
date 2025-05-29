@@ -81,6 +81,7 @@ export class TaskController {
 			}
 
 			const task = await this.taskRepository.update(id, updateData);
+			
 			res.json({
 				message: 'Task atualizada com sucesso',
 				task,

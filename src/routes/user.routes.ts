@@ -11,7 +11,10 @@ const userController = new UserController();
 router.post('/auth/register', validate(createUserSchema), userController.register.bind(userController));
 router.post('/auth/login', validate(loginUserSchema), userController.login.bind(userController));
 
-// rotas que requerem autenticação
+//rota protegida - refresh token
+router.post('/auth/refresh', authenticate, userController.refreshToken.bind(userController));
+
+//rotas protegidas - perfil do usuário
 router.get('/profile', authenticate, userController.profile.bind(userController));
 router.put('/profile', authenticate, validate(updateUserSchema), userController.updateProfile.bind(userController));
 router.delete('/profile', authenticate, userController.deleteAccount.bind(userController));

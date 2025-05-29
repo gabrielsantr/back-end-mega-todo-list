@@ -28,7 +28,7 @@ model Task {
   id          String   @id @default(uuid())
   title       String
   description String
-  date        DateTime
+  date        String
   priority    Priority
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())

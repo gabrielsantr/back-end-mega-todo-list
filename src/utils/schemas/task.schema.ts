@@ -15,12 +15,7 @@ export const taskSchema = z.object({
 	date: z
 		.string()
 		.datetime({ offset: true, message: 'Data deve estar em ISO-8601 completo' })
-		.pipe(
-			z
-				.string()
-				.transform((s) => new Date(s))
-				.refine((d) => d > new Date(), { message: 'Data deve ser futura' }),
-		),
+		.refine((s) => new Date(s) > new Date(), { message: 'Data deve ser futura' }),
 
 	completed: z.boolean().optional(),
 });

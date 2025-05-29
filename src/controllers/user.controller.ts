@@ -95,6 +95,30 @@ export class UserController {
 		}
 	}
 
+	//POST /auth/refresh
+	async refreshToken(req: Request, res: Response) {
+		try {
+			// req.user vem do middleware de autenticação (token atual ainda válido)
+			const { id, email } = req.user;
+
+			// Gerar novo JWT com mais 7 dias
+			const jwtSecret = process.env.JWT_SECRET;
+			if (!jwtSecret) {
+				res.status(500).json({ error: 'Configuração de JWT não encontrada' });
+				return;
+			}
+
+			const newToken = jwt.sign({ id, email }, jwtSecret, { expiresIn: '7d' });
+
+			res.json({
+				message: 'Token renovado com sucesso',
+				token: newToken,
+			});
+		} catch (error: unknown) {
+			handleError(error, res);
+		}
+	}
+
 	//GET /profile
 	async profile(req: Request, res: Response) {
 		try {
