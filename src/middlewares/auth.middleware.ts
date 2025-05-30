@@ -34,9 +34,6 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 
 		// Decodificar e verificar token
 
-		// console.log(token);
-		// console.log('--------------------------------');
-		// console.log(jwtSecret);
 		const decoded = jwt.verify(token, jwtSecret) as { id: string; email: string };
 
 		// Adicionar dados do usuário ao request

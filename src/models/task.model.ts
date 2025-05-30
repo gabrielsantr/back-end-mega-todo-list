@@ -3,7 +3,7 @@ export interface ITask {
 	title: string;
 	description: string;
 	priority: 'baixa' | 'média' | 'alta';
-	date: string;
+	date: Date;
 	completed: boolean;
 	userId: string;
 	createdAt: Date;

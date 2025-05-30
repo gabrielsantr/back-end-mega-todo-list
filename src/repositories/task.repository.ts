@@ -1,12 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import DatabaseConnection from '../config/database';
 import type { ITask } from '../models/task.model';
 
 export class TaskRepository {
-	private prisma: PrismaClient;
-
-	constructor() {
-		this.prisma = new PrismaClient();
-	}
+	private prisma = DatabaseConnection.getInstance();
 
 	//cria a task sem a necessidade de passar os campos id, createdAt, updatedAt e completed que são gerados automaticamente
 	async create(data: Omit<ITask, 'id' | 'createdAt' | 'updatedAt' | 'completed'>): Promise<ITask> {

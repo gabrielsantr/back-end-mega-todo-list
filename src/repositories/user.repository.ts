@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import DatabaseConnection from '../config/database';
 import type { IUser } from '../models/user.model';
 
 interface CreateUserData {
@@ -12,11 +13,7 @@ interface UpdateUserData {
 }
 
 export class UserRepository {
-	private prisma: PrismaClient;
-
-	constructor() {
-		this.prisma = new PrismaClient();
-	}
+	private prisma = DatabaseConnection.getInstance();
 
 	async create(userData: CreateUserData): Promise<IUser> {
 		return await this.prisma.user.create({
