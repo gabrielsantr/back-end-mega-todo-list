@@ -1,10 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import { PrismaClient } from '@prisma/client';
 import tasksRouter from './routes/task.routes';
 import userRouter from './routes/user.routes';
 import { loggingMiddleware } from './middlewares/logging.middleware';
 
 const app = express();
+const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
@@ -12,7 +14,7 @@ app.use(express.json());
 // Middleware de logging para todas as rotas
 app.use(loggingMiddleware);
 
-//USE ROUTES
+// USE ROUTES
 app.use(tasksRouter);
 app.use(userRouter);
 
