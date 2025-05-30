@@ -1,108 +1,82 @@
-# Instruções de Instalação - Backend Todo List
+# Backend Todo List
 
-## Pré-requisitos
+## Configuração
 
-- Node.js (versão 18+)
-- PostgreSQL instalado e rodando
-- Git instalado
+**Pré-requisitos:** Node.js 18+, PostgreSQL, Git
 
-## Configuração do Projeto
-
-### 1. Clone o repositório
+### 1. Clone e instale
 
 ```bash
 git clone https://github.com/gabrielsantr/back-end-mega-todo-list.git
 cd back-end-mega-todo-list
-```
-
-### 2. Instale as dependências
-
-```bash
 npm install
 ```
 
-### 3. Configure as variáveis de ambiente
+### 2. Configure variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env`:
 
 ```env
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_do_banco"
-JWT_SECRET="sua_chave_secreta_super_segura_aqui"
+JWT_SECRET="sua_chave_secreta_aqui"
 PORT=3000
 ```
 
-> Substitua `usuario`, `senha` e `nome_do_banco` pelas suas credenciais do PostgreSQL
-
-### 4. Configure o banco de dados
+### 3. Configure banco de dados
 
 ```bash
-# Executar migrations (criar tabelas)
 npx prisma migrate deploy
-
-# Gerar cliente do Prisma
 npx prisma generate
 ```
 
-### 5. Execute o projeto
+### 4. Execute
 
 ```bash
-# Modo desenvolvimento (recomendado)
+# Desenvolvimento
 npm run dev
 
-# OU compilar e executar em produção
+# Produção
 npm run build
 npm start
 ```
 
-## Verificação
+## Endpoints
 
-Se tudo estiver correto, você verá:
+Todas as rotas de tasks precisam de autenticação (token JWT).
 
-```text
-Servidor rodando na porta 3000
-```
-
-Teste uma requisição:
-
-```text
-GET http://localhost:3000/tasks
-```
-
-> Deve retornar erro de autenticação (401), o que é normal pois as rotas precisam de login.
-
-## Scripts Disponíveis
-
-- `npm run dev` - Desenvolvimento com hot reload
-- `npm run build` - Compilar TypeScript
-- `npm start` - Executar versão compilada
-
-## Possíveis Problemas
-
-### Erro de conexão com banco
-
-- Verifique se o PostgreSQL está rodando
-- Confirme as credenciais no arquivo `.env`
-
-### Erro "prisma generate"
-
-```bash
-npm install @prisma/client
-npx prisma generate
-```
-
-### Porta já em uso
-
-- Altere a `PORT` no arquivo `.env`
-- Ou finalize o processo que está usando a porta 3000
-
-## Endpoints Principais
-
-- `POST /users/register` - Cadastro de usuário
+- `POST /users/register` - Cadastro
 - `POST /users/login` - Login
 - `GET /tasks` - Listar tarefas
 - `POST /tasks` - Criar tarefa
 - `PUT /tasks/:id` - Atualizar tarefa
 - `DELETE /tasks/:id` - Deletar tarefa
-- `DELETE /tasks?completed=true` - Deletar todas as concluídas
+- `DELETE /tasks?completed=true` - Deletar concluídas
 
-> Todas as rotas de tasks precisam de autenticação (token JWT)
+## Melhorias Planejadas
+
+Próximos passos planejados para evolução e melhoria do projeto:
+
+- **Inversão de dependência**
+  - Interfaces para repositories e services
+  - Facilitar unit testing
+
+- **Aplicar princípios SOLID**
+  - Implementar os demais princípios após inversão de dependência
+  - Melhorar arquitetura e manutenibilidade
+
+- **Configurar Vitest e testes**
+  - Configurar framework de testes
+  - Implementar suite de testes automatizados
+
+- **Logging estruturado**
+  - Substituir console.log por winston/pino
+
+- **Melhorar validação e error handling**
+  - Validação rigorosa de entrada
+  - Centralizar tratamento de erros
+
+- **Documentação da API**
+  - Especificação OpenAPI e interface Swagger
+
+- **CI/CD e monitoramento**
+  - GitHub Actions e health checks

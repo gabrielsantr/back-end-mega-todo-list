@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { TaskRepository } from '../repositories/task.repository';
-import { handleError } from '../utils/handler/error.handler';
+import { handleError, NotFoundError, AuthorizationError, ValidationError } from '../utils/handler/error.handler';
 
 export class TaskController {
 	private taskRepository: TaskRepository;
@@ -35,14 +35,12 @@ export class TaskController {
 			const task = await this.taskRepository.findById(id);
 
 			if (!task) {
-				res.status(404).json({ error: 'Task não encontrada' });
-				return;
+				throw new NotFoundError('Task não encontrada');
 			}
 
 			// Verificar se a task pertence ao usuário
 			if (task.userId !== userId) {
-				res.status(403).json({ error: 'Acesso negado a esta task' });
-				return;
+				throw new AuthorizationError('Acesso negado a esta task');
 			}
 
 			res.json(task);
@@ -71,17 +69,15 @@ export class TaskController {
 			// Verificar se a task existe e pertence ao usuário
 			const existingTask = await this.taskRepository.findById(id);
 			if (!existingTask) {
-				res.status(404).json({ error: 'Task não encontrada' });
-				return;
+				throw new NotFoundError('Task não encontrada');
 			}
 
 			if (existingTask.userId !== userId) {
-				res.status(403).json({ error: 'Acesso negado a esta task' });
-				return;
+				throw new AuthorizationError('Acesso negado a esta task');
 			}
 
 			const task = await this.taskRepository.update(id, updateData);
-			
+
 			res.json({
 				message: 'Task atualizada com sucesso',
 				task,
@@ -99,17 +95,15 @@ export class TaskController {
 			// Verificar se a task existe e pertence ao usuário
 			const existingTask = await this.taskRepository.findById(id);
 			if (!existingTask) {
-				res.status(404).json({ error: 'Task não encontrada' });
-				return;
+				throw new NotFoundError('Task não encontrada');
 			}
 
 			if (existingTask.userId !== userId) {
-				res.status(403).json({ error: 'Acesso negado a esta task' });
-				return;
+				throw new AuthorizationError('Acesso negado a esta task');
 			}
 
 			await this.taskRepository.delete(id);
-			res.json({ message: 'Task deletada com sucesso' });
+			res.status(204).send();
 		} catch (error: unknown) {
 			handleError(error, res);
 		}
@@ -119,7 +113,7 @@ export class TaskController {
 		try {
 			const { ids } = req.body;
 			await this.taskRepository.deleteMany(ids);
-			res.json({ message: 'Tasks deletadas com sucesso' });
+			res.status(204).send();
 		} catch (error: unknown) {
 			handleError(error, res);
 		}
@@ -132,16 +126,11 @@ export class TaskController {
 
 			// Verificar se o query parameter completed=true foi enviado
 			if (completed !== 'true') {
-				res.status(400).json({
-					error: 'Para deletar tasks completadas, envie o query parameter completed=true',
-				});
-				return;
+				throw new ValidationError('Para deletar tasks completadas, envie o query parameter completed=true');
 			}
 
-			const deletedCount = await this.taskRepository.deleteCompletedByUserId(userId);
-			res.json({
-				message: `${deletedCount} tasks completadas foram deletadas com sucesso`,
-			});
+			await this.taskRepository.deleteCompletedByUserId(userId);
+			res.status(204).send();
 		} catch (error: unknown) {
 			handleError(error, res);
 		}

@@ -37,5 +37,9 @@ model Task {
   userId String
   user   User   @relation(fields: [userId], references: [id]) //relacionamento
 
+  // Índices para otimização de performance
+  @@index([userId, completed, priority, date], name: "task_user_listing_idx")
+  @@index([userId, completed], name: "task_user_completed_idx")
+  @@index([title], name: "task_title_search_idx")
   @@map("tasks")
 }

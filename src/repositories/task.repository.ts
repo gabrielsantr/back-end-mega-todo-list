@@ -22,7 +22,11 @@ export class TaskRepository {
 	async findByUserId(userId: string): Promise<ITask[]> {
 		return this.prisma.task.findMany({
 			where: { userId },
-			orderBy: [{ completed: 'asc' }, { priority: 'desc' }, { date: 'asc' }],
+			orderBy: [
+				{ completed: 'asc' }, // false (não concluídas) primeiro, true (concluídas) por último
+				{ priority: 'desc' }, // alta → média → baixa
+				{ date: 'asc' }, // data mais próxima primeiro
+			],
 		});
 	}
 

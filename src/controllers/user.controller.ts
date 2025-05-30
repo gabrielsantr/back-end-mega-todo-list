@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/user.repository';
-import { handleError } from '../utils/handler/error.handler';
+import { handleError, ConflictError, NotFoundError } from '../utils/handler/error.handler';
 
 export class UserController {
 	private userRepository: UserRepository;
@@ -19,8 +19,7 @@ export class UserController {
 			// Verificar se o usuário já existe
 			const existingUser = await this.userRepository.findByEmail(email);
 			if (existingUser) {
-				res.status(409).json({ error: 'Usuário já existe com este email' });
-				return;
+				throw new ConflictError('Usuário já existe com este email');
 			}
 
 			// Hash da senha
@@ -127,8 +126,7 @@ export class UserController {
 
 			const user = await this.userRepository.findById(userId);
 			if (!user) {
-				res.status(404).json({ error: 'Usuário não encontrado' });
-				return;
+				throw new NotFoundError('Usuário não encontrado');
 			}
 
 			// Retornar usuário sem a senha
@@ -150,8 +148,7 @@ export class UserController {
 			if (updateData.email) {
 				const emailExists = await this.userRepository.findByEmail(updateData.email);
 				if (emailExists && emailExists.id !== userId) {
-					res.status(409).json({ error: 'Email já está em uso' });
-					return;
+					throw new ConflictError('Email já está em uso');
 				}
 			}
 
@@ -182,7 +179,7 @@ export class UserController {
 
 			await this.userRepository.delete(userId);
 
-			res.json({ message: 'Conta deletada com sucesso' });
+			res.status(204).send();
 		} catch (error: unknown) {
 			handleError(error, res);
 		}
