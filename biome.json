@@ -15,5 +15,8 @@
 		"rules": {
 			"recommended": true
 		}
+	},
+	"files": {
+		"ignore": ["dist/**", "node_modules/**", "**/*.js"]
 	}
 }

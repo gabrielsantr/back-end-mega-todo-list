@@ -1,5 +1,5 @@
-import type { Response } from 'express';
 import { Prisma } from '@prisma/client';
+import type { Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 export function handleError(error: unknown, res: Response) {

@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 export const loggingMiddleware = (req: Request, res: Response, next: NextFunction) => {
 	const timestamp = new Date().toISOString();

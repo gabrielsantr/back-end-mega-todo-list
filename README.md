@@ -1,5 +1,21 @@
 # Backend Todo List
 
+## Sobre o Projeto
+
+Sistema de gerenciamento de tarefas desenvolvido para atender às necessidades do Sr. Jubileu, mascote da MegaJr., que precisa de uma ferramenta para organizar suas atividades e tarefas diárias.
+
+### Objetivo
+
+Desenvolvimento de sistema completo de lista de tarefas implementando funcionalidades CRUD para gerenciar tarefas com título, descrição, data, hora e prioridade.
+
+### Arquitetura
+
+- API HTTP com autenticação JWT
+- Banco PostgreSQL com Prisma ORM
+- Middleware de validação com Zod
+- Repository pattern para acesso a dados
+- Índices compostos para otimização de consultas
+
 ## Configuração
 
 **Pré-requisitos:** Node.js 18+, PostgreSQL, Git
@@ -44,13 +60,22 @@ npm start
 
 Todas as rotas de tasks precisam de autenticação (token JWT).
 
-- `POST /users/register` - Cadastro
-- `POST /users/login` - Login
+- `POST /auth/register` - Cadastro
+- `POST /auth/login` - Login
 - `GET /tasks` - Listar tarefas
 - `POST /tasks` - Criar tarefa
 - `PUT /tasks/:id` - Atualizar tarefa
 - `DELETE /tasks/:id` - Deletar tarefa
 - `DELETE /tasks?completed=true` - Deletar concluídas
+
+## Tecnologias Utilizadas
+
+- **Node.js** + **TypeScript**
+- **Express.js**
+- **PostgreSQL**
+- **Prisma**
+- **JWT** + **BCrypt**
+- **Zod**
 
 ## Melhorias Planejadas
 
@@ -70,10 +95,6 @@ Próximos passos planejados para evolução e melhoria do projeto:
 
 - **Logging estruturado**
   - Substituir console.log por winston/pino
-
-- **Melhorar validação e error handling**
-  - Validação rigorosa de entrada
-  - Centralizar tratamento de erros
 
 - **Documentação da API**
   - Especificação OpenAPI e interface Swagger

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { TaskRepository } from '../repositories/task.repository';
-import { handleError, NotFoundError, AuthorizationError, ValidationError } from '../utils/handler/error.handler';
+import { AuthorizationError, NotFoundError, ValidationError, handleError } from '../utils/handler/error.handler';
 
 export class TaskController {
 	private taskRepository: TaskRepository;

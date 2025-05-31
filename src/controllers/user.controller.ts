@@ -1,8 +1,8 @@
-import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/user.repository';
-import { handleError, ConflictError, NotFoundError } from '../utils/handler/error.handler';
+import { ConflictError, NotFoundError, handleError } from '../utils/handler/error.handler';
 
 export class UserController {
 	private userRepository: UserRepository;
