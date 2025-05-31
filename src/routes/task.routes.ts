@@ -16,16 +16,13 @@ router.get('/tasks/:id', authenticate, taskController.findById.bind(taskControll
 // Buscar todas as tasks do usuário
 router.get('/tasks', authenticate, taskController.list.bind(taskController));
 
-// Deletar todas as tasks completadas do usuário
-router.delete('/tasks', authenticate, taskController.deleteCompleted.bind(taskController));
-
 // Atualizar task pelo id dela
 router.put('/tasks/:id', authenticate, validate(updateTaskSchema), taskController.update.bind(taskController));
 
+// Deletar todas as tasks completadas do usuário
+router.delete('/tasks/completed', authenticate, taskController.deleteCompleted.bind(taskController));
+
 // Deletar task pelo id dela
 router.delete('/tasks/:id', authenticate, taskController.delete.bind(taskController));
-
-// Deletar várias tasks pelo id delas
-router.delete('/tasks/delete-many', authenticate, taskController.deleteMany.bind(taskController));
 
 export default router;

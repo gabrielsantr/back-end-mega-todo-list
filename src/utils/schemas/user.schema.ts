@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 //schema de usuario "genérico"
 export const userSchema = z.object({
-	id: z.string().uuid('ID deve ser um UUID válido'),
 	email: z
 		.string()
 		.email('Email deve ter um formato válido')
@@ -16,10 +15,10 @@ export const userSchema = z.object({
 });
 
 // schema para criação de usuário (registro)
-export const createUserSchema = userSchema.omit({ id: true });
+export const createUserSchema = userSchema;
 
-// schema para atualização (apenas dados editáveis, sem id)
-export const updateUserSchema = userSchema.omit({ id: true }).partial();
+// schema para atualização (dados editáveis opcionais)
+export const updateUserSchema = userSchema.partial();
 
 // para login (email + password)
-export const loginUserSchema = userSchema.pick({ email: true, password: true });
+export const loginUserSchema = userSchema;

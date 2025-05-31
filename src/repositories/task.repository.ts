@@ -30,7 +30,7 @@ export class TaskRepository {
 		});
 	}
 
-	async update(id: string, data: Partial<ITask>): Promise<ITask> {
+	async update(id: string, data: Partial<Omit<ITask, 'id' | 'createdAt' | 'updatedAt'>>): Promise<ITask> {
 		return this.prisma.task.update({
 			where: { id },
 			data,
@@ -43,19 +43,12 @@ export class TaskRepository {
 		});
 	}
 
-	async deleteMany(ids: string[]): Promise<void> {
+	async deleteCompletedByUserId(userId: string): Promise<void> {
 		await this.prisma.task.deleteMany({
-			where: { id: { in: ids } },
-		});
-	}
-
-	async deleteCompletedByUserId(userId: string): Promise<number> {
-		const result = await this.prisma.task.deleteMany({
 			where: {
 				userId,
 				completed: true,
 			},
 		});
-		return result.count;
 	}
 }

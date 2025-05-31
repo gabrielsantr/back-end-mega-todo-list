@@ -109,25 +109,9 @@ export class TaskController {
 		}
 	}
 
-	async deleteMany(req: Request, res: Response) {
-		try {
-			const { ids } = req.body;
-			await this.taskRepository.deleteMany(ids);
-			res.status(204).send();
-		} catch (error: unknown) {
-			handleError(error, res);
-		}
-	}
-
 	async deleteCompleted(req: Request, res: Response) {
 		try {
-			const { completed } = req.query;
 			const userId = req.user.id;
-
-			// Verificar se o query parameter completed=true foi enviado
-			if (completed !== 'true') {
-				throw new ValidationError('Para deletar tasks completadas, envie o query parameter completed=true');
-			}
 
 			await this.taskRepository.deleteCompletedByUserId(userId);
 			res.status(204).send();

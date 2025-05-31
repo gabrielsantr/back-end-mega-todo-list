@@ -1,21 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import DatabaseConnection from '../config/database';
 import type { IUser } from '../models/user.model';
-
-interface CreateUserData {
-	email: string;
-	password: string;
-}
-
-interface UpdateUserData {
-	email?: string;
-	password?: string;
-}
 
 export class UserRepository {
 	private prisma = DatabaseConnection.getInstance();
 
-	async create(userData: CreateUserData): Promise<IUser> {
+	async create(userData: Omit<IUser, 'id' | 'createdAt'>): Promise<IUser> {
 		return await this.prisma.user.create({
 			data: userData,
 		});
@@ -33,15 +22,15 @@ export class UserRepository {
 		});
 	}
 
-	async update(id: string, userData: UpdateUserData): Promise<IUser> {
+	async update(id: string, userData: Partial<Omit<IUser, 'id' | 'createdAt'>>): Promise<IUser> {
 		return await this.prisma.user.update({
 			where: { id },
 			data: userData,
 		});
 	}
 
-	async delete(id: string): Promise<IUser> {
-		return await this.prisma.user.delete({
+	async delete(id: string): Promise<void> {
+		await this.prisma.user.delete({
 			where: { id },
 		});
 	}

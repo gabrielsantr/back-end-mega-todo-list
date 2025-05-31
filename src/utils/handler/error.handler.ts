@@ -66,6 +66,12 @@ export function handleError(error: unknown, res: Response) {
 		});
 	}
 
+	if (error instanceof UnauthorizedError) {
+		return res.status(401).json({
+			error: error.message,
+		});
+	}
+
 	if (error instanceof NotFoundError) {
 		return res.status(404).json({
 			error: error.message,
@@ -103,6 +109,13 @@ export class AuthorizationError extends Error {
 	constructor(message = 'Acesso negado') {
 		super(message);
 		this.name = 'AuthorizationError';
+	}
+}
+
+export class UnauthorizedError extends Error {
+	constructor(message = 'Credenciais inválidas') {
+		super(message);
+		this.name = 'UnauthorizedError';
 	}
 }
 

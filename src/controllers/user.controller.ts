@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/user.repository';
-import { ConflictError, NotFoundError, handleError } from '../utils/handler/error.handler';
+import { ConflictError, NotFoundError, UnauthorizedError, handleError } from '../utils/handler/error.handler';
 
 export class UserController {
 	private userRepository: UserRepository;
@@ -34,8 +34,7 @@ export class UserController {
 			// Gerar JWT
 			const jwtSecret = process.env.JWT_SECRET;
 			if (!jwtSecret) {
-				res.status(500).json({ error: 'Configuração de JWT não encontrada' });
-				return;
+				throw new Error('Configuração de JWT não encontrada');
 			}
 
 			const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: '7d' });
@@ -61,22 +60,19 @@ export class UserController {
 			// Buscar usuário por email
 			const user = await this.userRepository.findByEmail(email);
 			if (!user) {
-				res.status(401).json({ error: 'Credenciais inválidas' });
-				return;
+				throw new UnauthorizedError('Credenciais inválidas');
 			}
 
 			// Verificar senha
 			const isValidPassword = await bcrypt.compare(password, user.password);
 			if (!isValidPassword) {
-				res.status(401).json({ error: 'Credenciais inválidas' });
-				return;
+				throw new UnauthorizedError('Credenciais inválidas');
 			}
 
 			// Gerar JWT
 			const jwtSecret = process.env.JWT_SECRET;
 			if (!jwtSecret) {
-				res.status(500).json({ error: 'Configuração de JWT não encontrada' });
-				return;
+				throw new Error('Configuração de JWT não encontrada');
 			}
 
 			const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: '7d' });
@@ -103,8 +99,7 @@ export class UserController {
 			// Gerar novo JWT com mais 7 dias
 			const jwtSecret = process.env.JWT_SECRET;
 			if (!jwtSecret) {
-				res.status(500).json({ error: 'Configuração de JWT não encontrada' });
-				return;
+				throw new Error('Configuração de JWT não encontrada');
 			}
 
 			const newToken = jwt.sign({ id, email }, jwtSecret, { expiresIn: '7d' });
