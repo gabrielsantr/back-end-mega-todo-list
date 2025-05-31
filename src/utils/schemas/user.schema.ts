@@ -6,7 +6,8 @@ export const userSchema = z.object({
 		.string()
 		.email('Email deve ter um formato válido')
 		.max(255, 'Email deve ter no máximo 255 caracteres')
-		.toLowerCase(),
+		.toLowerCase()
+		.trim(),
 	password: z
 		.string()
 		.min(8, 'Senha deve ter no mínimo 8 caracteres')
@@ -14,11 +15,11 @@ export const userSchema = z.object({
 		.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Senha deve ter pelo menos: 1 letra minúscula, 1 maiúscula e 1 número'),
 });
 
-// schema para criação de usuário (registro)
+// Schema para criação de usuário (registro) - todos os campos obrigatórios
 export const createUserSchema = userSchema;
 
-// schema para atualização (dados editáveis opcionais)
+// Schema para atualização de perfil - todos os campos opcionais
 export const updateUserSchema = userSchema.partial();
 
-// para login (email + password)
+// Schema para login - apenas email e password (mesmos campos do schema base)
 export const loginUserSchema = userSchema;
