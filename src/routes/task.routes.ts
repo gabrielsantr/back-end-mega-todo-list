@@ -19,7 +19,7 @@ router.get('/tasks', authenticate, taskController.list.bind(taskController));
 // Atualizar task pelo id dela
 router.put('/tasks/:id', authenticate, validate(updateTaskSchema), taskController.update.bind(taskController));
 
-// Deletar todas as tasks completadas do usuário
+// IMPORTANTE: Deletar todas as tasks completadas ANTES da rota de deletar por ID
 router.delete('/tasks/completed', authenticate, taskController.deleteCompleted.bind(taskController));
 
 // Deletar task pelo id dela

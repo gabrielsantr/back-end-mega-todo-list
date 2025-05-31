@@ -6,4 +6,7 @@ export const corsConfig: CorsOptions = {
 
 	// Métodos permitidos
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+
+	// Headers permitidos
+	allowedHeaders: ['Content-Type', 'Authorization'],
 };

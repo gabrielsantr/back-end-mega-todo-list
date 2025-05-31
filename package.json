@@ -5,7 +5,14 @@
 	"scripts": {
 		"dev": "tsx watch src/index.ts",
 		"build": "tsup",
-		"start": "node dist/index.js"
+		"start": "node dist/index.js",
+		"db:generate": "prisma generate",
+		"db:migrate": "prisma migrate deploy",
+		"db:studio": "prisma studio",
+		"db:reset": "prisma migrate reset",
+		"lint": "biome check src/",
+		"lint:fix": "biome check --apply src/",
+		"type-check": "tsc --noEmit"
 	},
 	"keywords": [],
 	"author": "",
